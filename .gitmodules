@@ -1,0 +1,3 @@
+[submodule "back-end/back-end/back-end-app"]
+	path = back-end/back-end/back-end-app
+	url = git@github.com:kasugaijin/rails-and-react.git
