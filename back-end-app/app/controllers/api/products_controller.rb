@@ -20,7 +20,6 @@ class Api::ProductsController < ApplicationController
 
   # POST /api
   def create
-    debugger
     product = {
       productId: @data.last["productId"] + 1,
       productName: params[:productName],
