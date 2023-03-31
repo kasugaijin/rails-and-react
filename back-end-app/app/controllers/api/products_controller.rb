@@ -20,14 +20,20 @@ class Api::ProductsController < ApplicationController
 
   # POST /api
   def create
+    debugger
     product = {
-    product_id: @data.last["productId"] + 1,
-    product_name: params[:productName],
-    email: params[:email]
+      productId: @data.last["productId"] + 1,
+      productName: params[:productName],
+      productOwnername: params[:productOwnerName],
+      Developers: params[:Developers],
+      scrumMasterName: params[:scrumMasterName],
+      startDate: params[:startDate],
+      methodology: params[:methodology]
     }
-    @data["users"] << user
+    
+    @data << product
     save_data
-    render json: user.to_json, status: :created
+    render json: product.to_json, status: :created
   end
 
   # PUT /api/products/:id
