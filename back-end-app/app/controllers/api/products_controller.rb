@@ -20,19 +20,24 @@ class Api::ProductsController < ApplicationController
 
   # POST /api
   def create
-    product = {
-      productId: @data.last["productId"] + 1,
-      productName: params[:productName],
-      productOwnername: params[:productOwnerName],
-      Developers: params[:Developers],
-      scrumMasterName: params[:scrumMasterName],
-      startDate: params[:startDate],
-      methodology: params[:methodology]
-    }
-    
-    @data << product
-    save_data
-    render json: product.to_json, status: :created
+    if request_values_missing?
+      errors = Hash("missing_values" => missing_values)
+      render json: errors.to_json, status: :unprocessable_entity
+    else
+      product = {
+        productId: @data.last["productId"] + 1,
+        productName: params[:productName],
+        productOwnername: params[:productOwnerName],
+        Developers: params[:Developers],
+        scrumMasterName: params[:scrumMasterName],
+        startDate: params[:startDate],
+        methodology: params[:methodology]
+      }
+      
+      @data << product
+      save_data
+      render json: product.to_json, status: :created
+    end
   end
 
   # PUT /api/products/:id
@@ -62,5 +67,15 @@ class Api::ProductsController < ApplicationController
 
   def save_data
     File.write(Rails.root.join("app/data.json"), JSON.pretty_generate(@data))
-  end      
+  end
+
+  def request_values_missing?
+    params.values.any? { |value| value.empty? }
+  end
+
+  def missing_values
+    error_keys = []
+    params.each_key { |key| error_keys << key if params[key].empty? }
+    error_keys
+  end
 end
